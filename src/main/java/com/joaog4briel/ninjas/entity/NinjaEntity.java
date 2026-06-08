@@ -37,4 +37,8 @@ public class NinjaEntity {
     public int getIdade() {return idade;}
 
     public void setIdade(int idade) {this.idade = idade;}
+
+    public MissoesEntity getMissoes() {return missoes;}
+
+    public void setMissoes(MissoesEntity missoes) {this.missoes = missoes;}
 }
