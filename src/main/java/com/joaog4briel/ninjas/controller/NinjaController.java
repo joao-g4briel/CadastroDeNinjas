@@ -1,16 +1,45 @@
 package com.joaog4briel.ninjas.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.joaog4briel.ninjas.entity.NinjaEntity;
+import com.joaog4briel.ninjas.service.NinjaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/ninjas")
 public class NinjaController {
 
-    @GetMapping("/hello")
-    public String boasVindas() {
-        return "Hello World!";
+    @Autowired
+    private NinjaService ninjaService;
+
+    @GetMapping
+    public List<NinjaEntity> listarTodos() {
+        return ninjaService.listarTodos();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<NinjaEntity> buscarPorId(@PathVariable Long id) {
+        return ninjaService.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<NinjaEntity> criar(@RequestBody NinjaEntity ninja) {
+        return ResponseEntity.ok(ninjaService.salvar(ninja));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<NinjaEntity> atualizar(@PathVariable Long id, @RequestBody NinjaEntity ninja) {
+        return ResponseEntity.ok(ninjaService.atualizar(id, ninja));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        ninjaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 }
