@@ -1,6 +1,8 @@
 package com.joaog4briel.ninjas.service;
 
+import com.joaog4briel.ninjas.entity.MissoesEntity;
 import com.joaog4briel.ninjas.entity.NinjaEntity;
+import com.joaog4briel.ninjas.repository.MissoesRepository;
 import com.joaog4briel.ninjas.repository.NinjaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,5 +42,19 @@ public class NinjaService {
 
     public void deletar(Long id) {
         ninjaRepository.deleteById(id);
+    }
+
+    @Autowired
+    private MissoesRepository missoesRepository;
+
+    public NinjaEntity atribuirMissao(Long ninjaId, Long missaoId) {
+        NinjaEntity ninja = ninjaRepository.findById(ninjaId)
+                .orElseThrow(() -> new RuntimeException("Ninja não encontrado"));
+
+        MissoesEntity missao = missoesRepository.findById(missaoId)
+                .orElseThrow(() -> new RuntimeException("Missão não encontrada"));
+
+        ninja.setMissoes(missao);
+        return ninjaRepository.save(ninja);
     }
 }

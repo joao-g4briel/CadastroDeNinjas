@@ -42,4 +42,11 @@ public class NinjaController {
         ninjaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{ninjaId}/missao/{missaoId}")
+    public ResponseEntity<NinjaEntity> atribuirMissao(
+            @PathVariable Long ninjaId,
+            @PathVariable Long missaoId) {
+        return ResponseEntity.ok(ninjaService.atribuirMissao(ninjaId, missaoId));
+    }
 }
